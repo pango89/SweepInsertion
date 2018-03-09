@@ -2,7 +2,7 @@ import time
 import datetime
 
 class Order(object):
-    def __init__(self,location=0,timeFeature={},physicalFeature={},depot={}):
+    def __init__(self,location={},timeFeature={},physicalFeature={},depot={}):
         self.location = location
         self.timeFeature = timeFeature
         self.physicalFeature = physicalFeature
@@ -22,10 +22,10 @@ class Depot(object):
         self.timeWindow = timeWindow
 
 class Configuration(object):
-    def __init__(self,averageVehicleSpeed=0,maxTotalTravelTime=0,MaxTotalTravelDistance=0):
+    def __init__(self,averageVehicleSpeed=0,maxTotalTravelTime=0,maxTotalTravelDistance=0):
         self.averageVehicleSpeed = averageVehicleSpeed
         self.maxTotalTravelTime = maxTotalTravelTime
-        self.MaxTotalTravelDistance = MaxTotalTravelDistance
+        self.maxTotalTravelDistance = maxTotalTravelDistance
 
 class DistanceInfo(object):
     def __init__(self,distance=0,time=0,totalCost=0):

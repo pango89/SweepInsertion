@@ -43,7 +43,7 @@ class PhysicalfeatureSchema(Schema):
 class ConfigurationSchema(Schema):
     averageVehicleSpeed = fields.Float()
     maxTotalTravelTime = fields.Float()
-    MaxTotalTravelDistance = fields.Integer()
+    maxTotalTravelDistance = fields.Integer()
 
     @post_load
     def make_configuration(self,data):

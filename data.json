@@ -56,7 +56,7 @@
 	"configuration": {
 		"averageVehicleSpeed": 40,
 		"maxTotalTravelTime": 360,
-		"MaxTotalTravelDistance": 100
+		"maxTotalTravelDistance": 100
 	},
 	"locationMatrix": [
 		[{
