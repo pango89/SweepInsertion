@@ -1,0 +1,81 @@
+{
+	"orders": [{
+		"location": {
+			"locationId": 1,
+			"latitude": 40.3345,
+			"longitude": 77.9898
+		},
+		"timeFeature": {
+			"timeWindow": {
+				"startTime": "11:30 AM",
+				"endTime": "02:30 PM"
+			},
+			"handlingTime": 10,
+			"readyForDepartureTime": "06:30 AM"
+		},
+		"physicalFeature": {
+			"capacity": 20,
+			"isLiftGateRequired": false
+		},
+		"depot": {
+			"location": {
+				"locationId": 0,
+				"latitude": 40.3345,
+				"longitude": 77.9898
+			},
+			"timeWindow": {
+				"startTime": "07:00 AM",
+				"endTime": "06:00 PM"
+			}
+		}
+	}, {}],
+	"vehicles": [{
+		"name": "Mercedes",
+		"isResidential": true,
+		"hasLiftGate": true,
+		"count": 20,
+		"capacity": 300
+	}, {
+		"name": "Volvo",
+		"isResidential": true,
+		"hasLiftGate": true,
+		"count": 10,
+		"capacity": 200
+	}],
+	"depot": {
+		"location": {
+			"locationId": 0,
+			"latitude": 40.3345,
+			"longitude": 77.9898
+		},
+		"timeWindow": {
+			"startTime": "07:00 AM",
+			"endTime": "06:00 PM"
+		}
+	},
+	"configuration": {
+		"averageVehicleSpeed": 40,
+		"maxTotalTravelTime": 360,
+		"maxTotalTravelDistance": 100
+	},
+	"locationMatrix": [
+		[{
+			"distance": 10,
+			"time": 5,
+			"totalCost": 200
+		}, {
+			"distance": 12,
+			"time": 6,
+			"totalCost": 250
+		}],
+		[{
+			"distance": 10,
+			"time": 5,
+			"totalCost": 200
+		}, {
+			"distance": 10,
+			"time": 5,
+			"totalCost": 200
+		}]
+	]
+}
