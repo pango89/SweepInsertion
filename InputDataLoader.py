@@ -1,44 +1,23 @@
 import json
-from pprint import pprint
-from marshmallow import Schema
-from Classes import *
-from Schemas import *
+from Schemas import JobInputSchema
 
 
-def data_loader(data):
-    '''
-    :param input json data:
-    :return: instantiated classes
-    '''
-#Process LocationMatirx
+def data_loader(input_data):
+    """
+    This method loads the input data into Job.
 
-    locationMatrix = data["locationMatrix"]
-    locationMatrixFinal = []
-    for location in locationMatrix:
-        inner_list = []
-        for distance_dict in location:
-                    distanceSchema = DistanceInfoSchema()
-                    distance_obj = distanceSchema.load(distance_dict)
-                    inner_list.append(distance_obj)
-        locationMatrixFinal.append(inner_list)
+    Args:
+        input_data: This is the input data parameter.
 
+    Returns:
+        This returns a Job Object.
+    """
     schema = JobInputSchema()
-    job_input = schema.load(data)
-    job_input.locationMatrix = locationMatrixFinal
-
-
-
-
-
-
-
-
-
-
-
+    job_input = schema.load(input_data)
+    return job_input
 
 
 if __name__ == '__main__':
     data = json.load(open('data.json'))
-
-    data_loader(data)
+    job = data_loader(data)
+    print('Job Filled')

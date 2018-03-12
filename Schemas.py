@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields, pprint, post_load
+from marshmallow import Schema, fields, post_load
 from Classes import *
 
 
@@ -8,7 +8,7 @@ class LocationSchema(Schema):
     longitude = fields.Float()
 
     @post_load
-    def make_location(self,data):
+    def make_location(self, data):
         return Location(**data)
 
 
@@ -17,7 +17,7 @@ class TimeWindowSchema(Schema):
     endTime = fields.Str()
 
     @post_load
-    def make_timeWindow(self,data):
+    def make_timeWindow(self, data):
         return TimeWindow(**data)
 
 
@@ -27,7 +27,7 @@ class TimeFeatureSchema(Schema):
     readyForDepartureTime = fields.Str()
 
     @post_load
-    def make_timeFeature(self,data):
+    def make_timeFeature(self, data):
         return TimeFeature(**data)
 
 
@@ -36,7 +36,7 @@ class PhysicalFeatureSchema(Schema):
     isLiftGateRequired = fields.Bool()
 
     @post_load
-    def make_physicalFeature(self,data):
+    def make_physicalFeature(self, data):
         return PhysicalFeature(**data)
 
 
@@ -46,7 +46,7 @@ class ConfigurationSchema(Schema):
     maxTotalTravelDistance = fields.Integer()
 
     @post_load
-    def make_configuration(self,data):
+    def make_configuration(self, data):
         return Configuration(**data)
 
 
@@ -56,7 +56,7 @@ class DistanceInfoSchema(Schema):
     totalCost = fields.Integer()
 
     @post_load
-    def make_distanceInfo(self,data):
+    def make_distanceInfo(self, data):
         return DistanceInfo(**data)
 
 
@@ -65,7 +65,7 @@ class DepotSchema(Schema):
     timeWindow = fields.Nested(TimeWindowSchema())
 
     @post_load
-    def make_depot(self,data):
+    def make_depot(self, data):
         return Depot(**data)
 
 
@@ -77,7 +77,7 @@ class VehicleSchema(Schema):
     capacity = fields.Integer()
 
     @post_load
-    def make_vehicle(self,data):
+    def make_vehicle(self, data):
         return Vehicle(**data)
 
 
@@ -88,7 +88,7 @@ class OrderSchema(Schema):
     depot = fields.Nested(DepotSchema())
 
     @post_load
-    def make_order(self,data):
+    def make_order(self, data):
         return Order(**data)
 
 
@@ -97,20 +97,8 @@ class JobInputSchema(Schema):
     vehicles = fields.List(fields.Nested(VehicleSchema))
     depot = fields.Nested(DepotSchema)
     configuration = fields.Nested(ConfigurationSchema)
-
-
+    locationMatrix = fields.List(fields.List(fields.Nested(DistanceInfoSchema)))
 
     @post_load
     def make_jobInput(self, data):
         return JobInput(**data)
-
-
-
-
-
-
-
-
-
-
-
