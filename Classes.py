@@ -1,3 +1,6 @@
+from enum import Enum
+
+
 class Order(object):
     def __init__(self, location={}, timeFeature={}, physicalFeature={}, depot={}):
         self.location = location
@@ -68,3 +71,36 @@ class JobInput(object):
         self.depot = depot
         self.configuration = configuration
         self.locationMatrix = locationMatrix
+
+
+class TimeSpaceInfo(object):
+    def __init__(self, travel_time, travel_distance, arrival_times, waiting_times, spare_times, earliest_departure_time,
+                 best_earliest_departure_time,
+                 best_latest_departure_time):
+        self.travel_time = travel_time
+        self.travel_distance = travel_distance
+        self.arrival_times = arrival_times
+        self.waiting_times = waiting_times
+        self.spare_times = spare_times
+        self.earliest_departure_time = earliest_departure_time
+        self.best_earliest_departure_time = best_earliest_departure_time
+        self.best_latest_departure_time = best_latest_departure_time
+
+
+class Route(object):
+    def __init__(self, status, orders, depot, vehicle, time_space_info):
+        self.status = status
+        self.orders = orders
+        self.depot = depot
+        self.vehicle = vehicle
+        self.time_space_info = time_space_info
+
+
+class FeasibilityStatus(Enum):
+    none = 0
+    feasible = 1
+    capacity_not_honoured = 2
+    time_window_not_honoured = 3
+    total_travel_time_not_honoured = 4
+    total_travel_distance_not_honoured = 5
+    max_count_stops_not_honoured = 6
