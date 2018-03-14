@@ -1,4 +1,6 @@
 from marshmallow import Schema, fields, post_load
+from marshmallow_enum import EnumField
+
 from Classes import *
 
 
@@ -13,8 +15,8 @@ class LocationSchema(Schema):
 
 
 class TimeWindowSchema(Schema):
-    startTime = fields.Str()
-    endTime = fields.Str()
+    startTime = fields.Time('%H:%M %p')
+    endTime = fields.Time('%H:%M %p')
 
     @post_load
     def make_timeWindow(self, data):
@@ -24,7 +26,7 @@ class TimeWindowSchema(Schema):
 class TimeFeatureSchema(Schema):
     timeWindow = fields.Nested(TimeWindowSchema())
     handlingTime = fields.Integer()
-    readyForDepartureTime = fields.Str()
+    readyForDepartureTime = fields.Time('%H:%M %p')
 
     @post_load
     def make_timeFeature(self, data):
@@ -92,6 +94,17 @@ class OrderSchema(Schema):
         return Order(**data)
 
 
+class TimeSpaceInfoSchema(Schema):
+    travel_time = fields.Int()
+    travel_distance = fields.Float()
+    arrival_times = fields.Dict(keys=fields.Nested(OrderSchema), values=fields.Time())
+    waiting_times = fields.Dict(keys=fields.Nested(OrderSchema), values=fields.Time())
+    spare_times = fields.Dict(keys=fields.Nested(OrderSchema), values=fields.Time())
+    earliest_departure_time = fields.Time()
+    best_earliest_departure_time = fields.Time()
+    best_latest_departure_time = fields.Time()
+
+
 class JobInputSchema(Schema):
     orders = fields.List(fields.Nested(OrderSchema))
     vehicles = fields.List(fields.Nested(VehicleSchema))
@@ -102,3 +115,15 @@ class JobInputSchema(Schema):
     @post_load
     def make_jobInput(self, data):
         return JobInput(**data)
+
+
+class RouteSchema(Schema):
+    status = EnumField(FeasibilityStatus)
+    orders = fields.List(fields.Nested(OrderSchema))
+    depot = fields.Nested(DepotSchema)
+    vehicle = fields.Nested(VehicleSchema)
+    time_space_info = fields.Nested(TimeSpaceInfoSchema)
+
+    @post_load
+    def make_route(self, data):
+        return Route(**data)

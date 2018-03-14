@@ -12,7 +12,7 @@ def get_next_cluster(orders, clustering_parameters):
 
 def get_cluster(orders, angular_offset, sector_size):
     order_filter = make_filter_orders(angular_offset, sector_size)
-    return filter(order_filter, orders)
+    return list(filter(order_filter, orders))
 
 
 def make_filter_orders(angular_offset, sector_size):
