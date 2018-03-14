@@ -32,6 +32,8 @@ def generate_routes(job, clustering_parameters, objective_coefficients):
         if len(un_routed_orders) <= 0:
             break
 
+    return output_routes
+
 
 def initiate_new_route(orders, depot, vehicle, matrix, configuration):
     route = None
