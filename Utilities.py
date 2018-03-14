@@ -11,7 +11,8 @@ class PolarCoordinate(object):
 
         if loc_p is not None or origin is not None:
             self.theta = (math.atan2(loc_p.latitude - origin.latitude,
-                                     loc_p.longitude - origin.longitude) + PolarCoordinate.period_length_in_radian) % PolarCoordinate.period_length_in_radian
+                                     loc_p.longitude - origin.longitude)
+                          + PolarCoordinate.period_length_in_radian) % PolarCoordinate.period_length_in_radian
             self.rho = math.sqrt((loc_p.latitude - origin.latitude) * (loc_p.latitude - origin.latitude) + (
                     loc_p.longitude - origin.Longitude) * (loc_p.longitude - origin.longitude))
 
