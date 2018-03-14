@@ -18,6 +18,14 @@ class Generic(object):
     CONST_DOUBLE_EPSILON = 0.0001
 
 
+class SweepConstants(object):
+    CONST_MAX_VEHICLE_CAPACITY_TOLERANCE_IN_KG = 0.0
+    CONST_MU = 1.0
+    CONST_ALPHA = 1.0
+    CONST_BETA = 1.0
+    CONST_LAMBDA = 1.0
+
+
 class SectorClusteringConstants():
     CONST_ANGULAR_SEED_IN_RADIAN = 0.0
     CONST_ANGULAR_SECTOR_SIZE_IN_RADIAN = 2 * math.pi
