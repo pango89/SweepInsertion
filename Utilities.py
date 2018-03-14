@@ -1,10 +1,10 @@
 import math
-from Constants import PolarCoordiantesConstants, Generic
+from Constants import PolarCoordinatesConstants, Generic
 
 
 class PolarCoordinate(object):
-    min_angle_in_radian = PolarCoordiantesConstants.CONST_MIN_POLAR_ANGLE_IN_RADIAN
-    max_angle_in_radian = PolarCoordiantesConstants.CONST_MAX_POLAR_ANGLE_IN_RADIAN
+    min_angle_in_radian = PolarCoordinatesConstants.CONST_MIN_POLAR_ANGLE_IN_RADIAN
+    max_angle_in_radian = PolarCoordinatesConstants.CONST_MAX_POLAR_ANGLE_IN_RADIAN
     period_length_in_radian = max_angle_in_radian - min_angle_in_radian
 
     def __init__(self, loc_p=None, origin=None):

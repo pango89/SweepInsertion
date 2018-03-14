@@ -2,22 +2,28 @@ import json
 from Schemas import JobInputSchema
 
 
-def data_loader(input_data):
+def data_loader():
     """
     This method loads the input data into Job.
 
     Args:
-        input_data: This is the input data parameter.
 
     Returns:
         This returns a Job Object.
     """
     schema = JobInputSchema()
-    job_input = schema.load(input_data)
-    return job_input
+    input_data = json.load(open('data.json'))
+    job = schema.load(input_data)
+    calculate_distance_from_depot(job.orders, job.locationMatrix)
+    return job
 
 
-if __name__ == '__main__':
-    data = json.load(open('data.json'))
-    job = data_loader(data)
-    print('Job Filled')
+def calculate_distance_from_depot(orders, matrix):
+    order_map = make_map_orders(matrix)
+    return map(order_map, orders)
+
+
+def make_map_orders(matrix):
+    def map_order(order):
+        order.fill_distance_from_Depot(matrix)
+    return map_order
