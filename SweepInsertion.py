@@ -1,10 +1,11 @@
 import SectorClustering as SectorClustering
 import FeasibilityUtility
+import ObjectiveFunctions
 import sys
 from Classes import Route, FeasibilityStatus
 
 
-def generate_routes(job, clustering_parameters):
+def generate_routes(job, clustering_parameters, objective_coefficients):
     output_routes = []
     un_routed_orders = job.orders[0:]
 
@@ -19,7 +20,8 @@ def generate_routes(job, clustering_parameters):
             break
 
         if len(clustered_orders) > 0:
-            apply_best_feasible_insertion(route, clustered_orders, job.depot, job.locationMatrix, job.configuration)
+            apply_best_feasible_insertion(route, clustered_orders, job.depot, job.locationMatrix, job.configuration,
+                                          objective_coefficients)
 
         if len(route.orders) > 0:
             output_routes.append(route)
@@ -49,7 +51,7 @@ def initiate_new_route(orders, depot, vehicle, matrix, configuration):
     return route
 
 
-def apply_best_feasible_insertion(route, clustered_orders, depot, matrix, configuration):
+def apply_best_feasible_insertion(route, clustered_orders, depot, matrix, configuration, coefficients):
     while True:
         best_route_timing = None
         best_order_to_insert = None
@@ -66,12 +68,13 @@ def apply_best_feasible_insertion(route, clustered_orders, depot, matrix, config
 
             for i in range(0, len(route.orders) + 1):
                 updated_orders = route.orders[:i] + [order] + route.orders[i:]
-                status, new_time_space_info = FeasibilityUtility.perform_feasibility_check(updated_orders,
-                                                                                           depot,
+                status, new_time_space_info = FeasibilityUtility.perform_feasibility_check(updated_orders, depot,
                                                                                            matrix,
                                                                                            configuration)
                 if status == FeasibilityStatus.feasible:
-                    insertion_cost = ObjectiveFunctions.GetInsertionCost1()
+                    insertion_cost = ObjectiveFunctions.get_insertion_cost_1(route.time_space_info, new_time_space_info,
+                                                                             depot, updated_orders, i, matrix,
+                                                                             coefficients)
 
                     if insertion_cost >= best_insertion_cost:
                         continue
@@ -85,7 +88,9 @@ def apply_best_feasible_insertion(route, clustered_orders, depot, matrix, config
             if order_to_insert is None:
                 continue
 
-            profit = ObjectiveFunctions.GetInsertionProfit(best_order_sequence)
+            profit = ObjectiveFunctions.get_insertion_profit(route.time_space_info, best_route_timing_so_far, depot,
+                                                             best_order_sequence, order_to_insert, position_to_insert,
+                                                             matrix, coefficients)
 
             if profit <= best_insertion_profit:
                 continue
