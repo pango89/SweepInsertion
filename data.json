@@ -28,7 +28,7 @@
 				"endTime": "06:00 PM"
 			}
 		}
-	}, {}],
+	}],
 	"vehicles": [{
 		"name": "Mercedes",
 		"isResidential": true,

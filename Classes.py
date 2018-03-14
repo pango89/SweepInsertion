@@ -7,7 +7,10 @@ class Order(object):
         self.timeFeature = timeFeature
         self.physicalFeature = physicalFeature
         self.depot = depot
-        # add distance from depot
+        self.distance_from_depot = 0
+
+    def fill_distance_from_depot(self, matrix):
+        self.distance_from_depot = matrix[self.depot.location.locationId][self.location.locationId].distance
 
 
 class Vehicle(object):

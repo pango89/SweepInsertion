@@ -13,17 +13,11 @@ def data_loader():
     """
     schema = JobInputSchema()
     input_data = json.load(open('data.json'))
-    job = schema.load(input_data)
-    calculate_distance_from_depot(job.orders, job.locationMatrix)
+    job = schema.load(input_data).data
+    fill_distance_from_depot(job.orders, job.locationMatrix)
     return job
 
 
-def calculate_distance_from_depot(orders, matrix):
-    order_map = make_map_orders(matrix)
-    return map(order_map, orders)
-
-
-def make_map_orders(matrix):
-    def map_order(order):
-        order.fill_distance_from_Depot(matrix)
-    return map_order
+def fill_distance_from_depot(orders, matrix):
+    for order in orders:
+        order.fill_distance_from_depot(matrix)
