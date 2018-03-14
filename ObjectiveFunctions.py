@@ -1,13 +1,10 @@
-from Constants import SweepConstants
-
-
 class ObjectiveCoefficient(object):
 
-    def __init__(self):
-        self.mu = SweepConstants.CONST_MU
-        self.alpha = SweepConstants.CONST_ALPHA
-        self.beta = SweepConstants.CONST_BETA
-        self.lambda_ = SweepConstants.CONST_LAMBDA
+    def __init__(self, mu, alpha, beta, lambda_):
+        self.mu = mu
+        self.alpha = alpha
+        self.beta = beta
+        self.lambda_ = lambda_
 
     @classmethod
     def from_parameters(cls, mu, alpha, beta, lambda_):
