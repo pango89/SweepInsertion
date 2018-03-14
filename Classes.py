@@ -1,5 +1,5 @@
 from enum import Enum
-
+from Utilities import PolarCoordinate
 
 class Order(object):
     def __init__(self, location={}, timeFeature={}, physicalFeature={}, depot={}):
@@ -8,6 +8,8 @@ class Order(object):
         self.physicalFeature = physicalFeature
         self.depot = depot
         self.distance_from_depot = 0
+        self.PolarCoordinate = PolarCoordinate(self.location,self.depot.location)
+
 
     def fill_distance_from_depot(self, matrix):
         self.distance_from_depot = matrix[self.depot.location.locationId][self.location.locationId].distance

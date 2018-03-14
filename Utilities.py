@@ -14,7 +14,7 @@ class PolarCoordinate(object):
                                      loc_p.longitude - origin.longitude)
                           + PolarCoordinate.period_length_in_radian) % PolarCoordinate.period_length_in_radian
             self.rho = math.sqrt((loc_p.latitude - origin.latitude) * (loc_p.latitude - origin.latitude) + (
-                    loc_p.longitude - origin.Longitude) * (loc_p.longitude - origin.longitude))
+                    loc_p.longitude - origin.longitude) * (loc_p.longitude - origin.longitude))
 
     @classmethod
     def from_rho_theta(cls, rho, theta):
