@@ -69,7 +69,7 @@ def is_time_window_honoured(orders, depot, matrix, configuration):
                                                      best_earliest_departure_time,
                                                      best_late_departure_time)
 
-        if configuration.maxTotalTravelTime < travel_time_aggregate:
+        if not is_total_travel_time_honoured(travel_time_aggregate, configuration.maxTotalTravelTime):
             feasibility_status = FeasibilityStatus.total_travel_time_not_honoured
             return feasibility_status, TimeSpaceInfo(travel_time_aggregate, travel_distance_aggregate,
                                                      orders_arrival_time,
@@ -80,7 +80,7 @@ def is_time_window_honoured(orders, depot, matrix, configuration):
         travel_distance = (matrix[previous_order.location.locationId][current_order.location.locationId]).distance
         travel_distance_aggregate += travel_distance
 
-        if configuration.maxTotalTravelDistance < travel_distance_aggregate:
+        if not is_total_travel_distance_honoured(travel_distance_aggregate, configuration.maxTotalTravelDistance):
             feasibility_status = FeasibilityStatus.total_travel_distance_not_honoured
             return feasibility_status, TimeSpaceInfo(travel_time_aggregate, travel_distance_aggregate,
                                                      orders_arrival_time,
@@ -123,7 +123,8 @@ def is_time_window_honoured(orders, depot, matrix, configuration):
                 best_late_departure_time = best_earliest_departure_time
 
     travel_time_aggregate = service_start_time + current_order.timeFeature.handlingTime - best_earliest_departure_time
-    if configuration.maxTotalTravelTime < travel_time_aggregate:
+
+    if not is_total_travel_time_honoured(travel_time_aggregate, configuration.maxTotalTravelTime):
         feasibility_status = FeasibilityStatus.total_travel_time_not_honoured
         return feasibility_status, TimeSpaceInfo(travel_time_aggregate, travel_distance_aggregate, orders_arrival_time,
                                                  orders_wait_time, orders_spare_time, earliest_departure_time,
@@ -139,6 +140,14 @@ def is_time_window_honoured(orders, depot, matrix, configuration):
 
 def is_max_stops_count_honoured(orders, max_allowed_stops):
     return len(orders) <= max_allowed_stops
+
+
+def is_total_travel_time_honoured(travel_time, max_travel_time):
+    return travel_time <= max_travel_time
+
+
+def is_total_travel_distance_honoured(travel_distance, max_travel_distance):
+    return travel_distance <= max_travel_distance
 
 
 def is_contained_in_time_slot(start, end, time):
@@ -174,17 +183,15 @@ def push_back_departure_time(time_saving, arrival_times, wait_times, spare_times
     return updated_departure_time, service_start_time, minimum_spare_time
 
 
-def perform_feasibility_check(orders, new_order, index, depot, vehicle, matrix, configuration):
-    new_order_sequence = orders[:index] + [new_order] + orders[index:]
-
-    if not is_max_stops_count_honoured(new_order_sequence, configuration.maxAllowedStopsCount):
+def perform_feasibility_check(orders, depot, vehicle, matrix, configuration):
+    if not is_max_stops_count_honoured(orders, configuration.maxAllowedStopsCount):
         feasibility_status = FeasibilityStatus.max_count_stops_not_honoured
         return feasibility_status, None
 
-    if not is_capacity_honoured(new_order_sequence, vehicle.capacity):
+    if not is_capacity_honoured(orders, vehicle.capacity):
         feasibility_status = FeasibilityStatus.capacity_not_honoured
         return feasibility_status, None
 
-    feasibility_status, time_space_info = is_time_window_honoured(new_order_sequence, depot, matrix, configuration)
+    feasibility_status, time_space_info = is_time_window_honoured(orders, depot, matrix, configuration)
 
     return feasibility_status, time_space_info

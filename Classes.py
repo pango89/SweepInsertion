@@ -7,6 +7,7 @@ class Order(object):
         self.timeFeature = timeFeature
         self.physicalFeature = physicalFeature
         self.depot = depot
+        # add distance from depot
 
 
 class Vehicle(object):
@@ -93,6 +94,10 @@ class Route(object):
         self.orders = orders
         self.depot = depot
         self.vehicle = vehicle
+        self.time_space_info = time_space_info
+
+    def update(self, orders, time_space_info):
+        self.orders = orders
         self.time_space_info = time_space_info
 
 
