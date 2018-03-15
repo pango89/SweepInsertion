@@ -17,7 +17,7 @@ def get_cluster(orders, angular_offset, sector_size):
 
 def make_filter_orders(angular_offset, sector_size):
     def filter_order(order):
-        PolarCoordinate.is_in_range(order.PolarCoordinate.theta, angular_offset, angular_offset + sector_size)
+        return PolarCoordinate.is_in_range(order.polar_coordinate.theta, angular_offset, angular_offset + sector_size)
 
     return filter_order
 

@@ -1,4 +1,5 @@
 from Classes import TimeSpaceInfo, FeasibilityStatus
+from datetime import datetime, timedelta, date
 
 
 def is_capacity_honoured(orders, max_allowed_capacity):
@@ -7,6 +8,14 @@ def is_capacity_honoured(orders, max_allowed_capacity):
         return False
 
     return True
+
+
+def add_time_and_time_delta(time, delta):
+    return (datetime.combine(date.today(), time) + timedelta(minutes=delta)).time()
+
+
+def subtract_time_and_time_delta(time, delta):
+    return (datetime.combine(date.today(), time) - timedelta(minutes=delta)).time()
 
 
 def is_time_window_honoured(orders, depot, matrix, configuration):
@@ -27,7 +36,7 @@ def is_time_window_honoured(orders, depot, matrix, configuration):
     travel_time = (matrix[depot.location.locationId][current_order.location.locationId]).time
     travel_time_aggregate = travel_time
 
-    service_start_time = travel_time + earliest_departure_time
+    service_start_time = add_time_and_time_delta(earliest_departure_time, travel_time)
     best_earliest_departure_time = earliest_departure_time
     best_late_departure_time = earliest_departure_time
 
@@ -43,7 +52,7 @@ def is_time_window_honoured(orders, depot, matrix, configuration):
 
     if earliest_time > service_start_time:
         service_start_time = earliest_time
-        best_earliest_departure_time = service_start_time - travel_time
+        best_earliest_departure_time = subtract_time_and_time_delta(service_start_time, travel_time)
     arrival_times.append(service_start_time)
     wait_times.append(0)
     spare_times.append(latest_time - service_start_time)
@@ -59,7 +68,8 @@ def is_time_window_honoured(orders, depot, matrix, configuration):
         travel_time = (matrix[previous_order.location.locationId][current_order.location.locationId]).time
         travel_time_aggregate += previous_order.timeFeature.handlingTime + travel_time
 
-        service_start_time = service_start_time + previous_order.timeFeature.handlingTime + travel_time
+        service_start_time = add_time_and_time_delta(
+            add_time_and_time_delta(service_start_time, previous_order.timeFeature.handlingTime), travel_time)
 
         if not (is_contained_in_time_slot(earliest_time, latest_time, service_start_time)):
             feasibility_status = FeasibilityStatus.time_window_not_honoured

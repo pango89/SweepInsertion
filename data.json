@@ -2,8 +2,8 @@
 	"orders": [{
 		"location": {
 			"locationId": 1,
-			"latitude": 40.3345,
-			"longitude": 77.9898
+			"latitude": 40.036277,
+			"longitude": -75.041383
 		},
 		"timeFeature": {
 			"timeWindow": {
@@ -20,8 +20,8 @@
 		"depot": {
 			"location": {
 				"locationId": 0,
-				"latitude": 40.3345,
-				"longitude": 77.9898
+				"latitude": 40.1113,
+				"longitude": -79.985007
 			},
 			"timeWindow": {
 				"startTime": "07:00 AM",
@@ -45,8 +45,8 @@
 	"depot": {
 		"location": {
 			"locationId": 0,
-			"latitude": 40.3345,
-			"longitude": 77.9898
+			"latitude": 40.1113,
+			"longitude": -79.985007
 		},
 		"timeWindow": {
 			"startTime": "07:00 AM",
@@ -56,26 +56,27 @@
 	"configuration": {
 		"averageVehicleSpeed": 40,
 		"maxTotalTravelTime": 360,
-		"maxTotalTravelDistance": 100
+		"maxTotalTravelDistance": 100,
+		"maxAllowedStopsCount": 20
 	},
 	"locationMatrix": [
 		[{
-			"distance": 10,
-			"time": 5,
-			"totalCost": 200
+			"distance": 0,
+			"time": 0,
+			"totalCost": 0
 		}, {
-			"distance": 12,
-			"time": 6,
+			"distance": 7,
+			"time": 22,
 			"totalCost": 250
 		}],
 		[{
-			"distance": 10,
-			"time": 5,
-			"totalCost": 200
+			"distance": 7,
+			"time": 22,
+			"totalCost": 250
 		}, {
-			"distance": 10,
-			"time": 5,
-			"totalCost": 200
+			"distance": 0,
+			"time": 0,
+			"totalCost": 0
 		}]
 	]
 }
