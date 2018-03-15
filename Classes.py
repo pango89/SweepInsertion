@@ -1,5 +1,7 @@
 from enum import Enum
+from datetime import datetime
 from Utilities import PolarCoordinate
+
 
 class Order(object):
     def __init__(self, location={}, timeFeature={}, physicalFeature={}, depot={}):
@@ -8,7 +10,7 @@ class Order(object):
         self.physicalFeature = physicalFeature
         self.depot = depot
         self.distance_from_depot = 0
-        self.PolarCoordinate = PolarCoordinate(self.location,self.depot.location)
+        self.polar_coordinate = PolarCoordinate(self.location, self.depot.location)
 
 
     def fill_distance_from_depot(self, matrix):
@@ -31,10 +33,11 @@ class Depot(object):
 
 
 class Configuration(object):
-    def __init__(self, averageVehicleSpeed=0, maxTotalTravelTime=0, maxTotalTravelDistance=0):
+    def __init__(self, averageVehicleSpeed=0, maxTotalTravelTime=0, maxTotalTravelDistance=0, maxAllowedStopsCount=0):
         self.averageVehicleSpeed = averageVehicleSpeed
         self.maxTotalTravelTime = maxTotalTravelTime
         self.maxTotalTravelDistance = maxTotalTravelDistance
+        self.maxAllowedStopsCount = maxAllowedStopsCount
 
 
 class DistanceInfo(object):
@@ -45,16 +48,16 @@ class DistanceInfo(object):
 
 
 class TimeFeature(object):
-    def __init__(self, timeWindow={}, handlingTime=0, readyForDepartureTime=0):
+    def __init__(self, timeWindow={}, handlingTime=0, readyForDepartureTime=''):
         self.timeWindow = timeWindow
         self.handlingTime = handlingTime
-        self.readyForDepartureTime = readyForDepartureTime
+        self.readyForDepartureTime = datetime.strptime(readyForDepartureTime, '%I:%M %p').time()
 
 
 class TimeWindow(object):
-    def __init__(self, startTime=0, endTime=0):
-        self.startTime = startTime
-        self.endTime = endTime
+    def __init__(self, startTime='', endTime=''):
+        self.startTime = datetime.strptime(startTime, '%I:%M %p').time()
+        self.endTime = datetime.strptime(endTime, '%I:%M %p').time()
 
 
 class Location(object):

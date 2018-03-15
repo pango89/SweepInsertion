@@ -13,7 +13,7 @@ def data_loader():
     """
     schema = JobInputSchema()
     input_data = json.load(open('data.json'))
-    job = schema.load(input_data).data
+    job = schema.load(input_data)
     fill_distance_from_depot(job.orders, job.locationMatrix)
     return job
 

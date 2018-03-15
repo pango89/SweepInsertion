@@ -41,7 +41,7 @@ def initiate_new_route(orders, depot, vehicle, matrix, configuration):
         order = orders[i]
         route = Route(FeasibilityStatus.none, [order], depot, vehicle, {})
 
-        route.status, route.time_space_info = FeasibilityUtility.perform_feasibility_check(route.orders, depot,
+        route.status, route.time_space_info = FeasibilityUtility.perform_feasibility_check(route.orders, depot, vehicle,
                                                                                            matrix, configuration)
 
         if route.status == FeasibilityStatus.Feasible:

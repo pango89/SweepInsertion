@@ -1,5 +1,5 @@
 from marshmallow import Schema, fields, post_load
-from marshmallow_enum import EnumField
+#from marshmallow_enum import EnumField
 
 from Classes import *
 
@@ -15,8 +15,8 @@ class LocationSchema(Schema):
 
 
 class TimeWindowSchema(Schema):
-    startTime = fields.Time('%H:%M %p')
-    endTime = fields.Time('%H:%M %p')
+    startTime = fields.Str()#Time('%H:%M %p')
+    endTime = fields.Str()#Time('%H:%M %p')
 
     @post_load
     def make_timeWindow(self, data):
@@ -26,7 +26,7 @@ class TimeWindowSchema(Schema):
 class TimeFeatureSchema(Schema):
     timeWindow = fields.Nested(TimeWindowSchema())
     handlingTime = fields.Integer()
-    readyForDepartureTime = fields.Time('%H:%M %p')
+    readyForDepartureTime = fields.Str()#Time('%H:%M %p')
 
     @post_load
     def make_timeFeature(self, data):
@@ -46,6 +46,7 @@ class ConfigurationSchema(Schema):
     averageVehicleSpeed = fields.Float()
     maxTotalTravelTime = fields.Float()
     maxTotalTravelDistance = fields.Integer()
+    maxAllowedStopsCount = fields.Integer()
 
     @post_load
     def make_configuration(self, data):
@@ -118,7 +119,7 @@ class JobInputSchema(Schema):
 
 
 class RouteSchema(Schema):
-    status = EnumField(FeasibilityStatus)
+    #status = EnumField(FeasibilityStatus)
     orders = fields.List(fields.Nested(OrderSchema))
     depot = fields.Nested(DepotSchema)
     vehicle = fields.Nested(VehicleSchema)
