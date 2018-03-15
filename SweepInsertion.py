@@ -25,7 +25,7 @@ def generate_routes(job, clustering_parameters, objective_coefficients):
 
         if len(route.orders) > 0:
             output_routes.append(route)
-            un_routed_orders = [order for order in un_routed_orders if order not in route]
+            un_routed_orders = [order for order in un_routed_orders if order not in route.orders]
         else:
             break
 
@@ -44,7 +44,7 @@ def initiate_new_route(orders, depot, vehicle, matrix, configuration):
         route.status, route.time_space_info = FeasibilityUtility.perform_feasibility_check(route.orders, depot, vehicle,
                                                                                            matrix, configuration)
 
-        if route.status == FeasibilityStatus.Feasible:
+        if route.status == FeasibilityStatus.feasible:
             del orders[i]
             break
         else:
