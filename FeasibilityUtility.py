@@ -18,6 +18,10 @@ def subtract_time_and_time_delta(time, delta):
     return (datetime.combine(date.today(), time) - timedelta(minutes=delta)).time()
 
 
+def subtract_time_and_time(time1, time2):
+    return ((datetime.combine(date.today(), time1) - datetime.combine(date.today(), time2)).total_seconds()) / 60
+
+
 def is_time_window_honoured(orders, depot, matrix, configuration):
     orders_arrival_time = {}
     orders_wait_time = {}
@@ -43,7 +47,7 @@ def is_time_window_honoured(orders, depot, matrix, configuration):
     travel_distance = (matrix[depot.location.locationId][current_order.location.locationId]).distance
     travel_distance_aggregate = travel_distance
 
-    if not (is_contained_in_time_slot(earliest_time, latest_time, service_start_time)):
+    if not (is_contained_in_time_slot(earliest_departure_time, latest_time, service_start_time)):
         feasibility_status = FeasibilityStatus.time_window_not_honoured
         return feasibility_status, TimeSpaceInfo(travel_time_aggregate, travel_distance_aggregate, orders_arrival_time,
                                                  orders_wait_time, orders_spare_time, earliest_departure_time,
@@ -55,7 +59,7 @@ def is_time_window_honoured(orders, depot, matrix, configuration):
         best_earliest_departure_time = subtract_time_and_time_delta(service_start_time, travel_time)
     arrival_times.append(service_start_time)
     wait_times.append(0)
-    spare_times.append(latest_time - service_start_time)
+    spare_times.append(subtract_time_and_time(latest_time, service_start_time))
     minimum_spare_time = spare_times[0]
 
     for i in range(1, len(orders)):
@@ -123,16 +127,15 @@ def is_time_window_honoured(orders, depot, matrix, configuration):
             else:
                 minimum_spare_time = min(current_spare_time, minimum_spare_time)
 
-        is_last_stop = (i == len(orders) - 1)
+    time_saving = min(minimum_spare_time, spare_times[-1])
+    if time_saving > 0:
+        best_late_departure_time = add_time_and_time_delta(best_earliest_departure_time, time_saving)
+    else:
+        best_late_departure_time = best_earliest_departure_time
 
-        if is_last_stop:
-            time_saving = min(minimum_spare_time, spare_times[-1])
-            if time_saving > 0:
-                best_late_departure_time = best_earliest_departure_time + time_saving
-            else:
-                best_late_departure_time = best_earliest_departure_time
-
-    travel_time_aggregate = service_start_time + current_order.timeFeature.handlingTime - best_earliest_departure_time
+    travel_time_aggregate = subtract_time_and_time(
+        add_time_and_time_delta(service_start_time, current_order.timeFeature.handlingTime),
+        best_earliest_departure_time)
 
     if not is_total_travel_time_honoured(travel_time_aggregate, configuration.maxTotalTravelTime):
         feasibility_status = FeasibilityStatus.total_travel_time_not_honoured
@@ -142,6 +145,12 @@ def is_time_window_honoured(orders, depot, matrix, configuration):
                                                  best_late_departure_time)
 
     feasibility_status = FeasibilityStatus.feasible
+
+    for index, order in enumerate(orders):
+        orders_arrival_time[order] = arrival_times[index]
+        orders_wait_time[order] = wait_times[index]
+        orders_spare_time[order] = spare_times[index]
+
     return feasibility_status, TimeSpaceInfo(travel_time_aggregate, travel_distance_aggregate, orders_arrival_time,
                                              orders_wait_time, orders_spare_time, earliest_departure_time,
                                              best_earliest_departure_time,
