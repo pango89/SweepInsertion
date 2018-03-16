@@ -75,7 +75,7 @@ def is_time_window_honoured(orders, depot, matrix, configuration):
         service_start_time = add_time_and_time_delta(
             add_time_and_time_delta(service_start_time, previous_order.timeFeature.handlingTime), travel_time)
 
-        if not (is_contained_in_time_slot(earliest_time, latest_time, service_start_time)):
+        if not (is_contained_in_time_slot(earliest_departure_time, latest_time, service_start_time)):
             feasibility_status = FeasibilityStatus.time_window_not_honoured
             return feasibility_status, TimeSpaceInfo(travel_time_aggregate, travel_distance_aggregate,
                                                      orders_arrival_time,
@@ -104,7 +104,7 @@ def is_time_window_honoured(orders, depot, matrix, configuration):
 
         arrival_times.append(service_start_time)
 
-        earliness = earliest_time - service_start_time
+        earliness = subtract_time_and_time(earliest_time, service_start_time)
 
         if earliness > 0:
             wait_times.append(earliness)
@@ -112,7 +112,7 @@ def is_time_window_honoured(orders, depot, matrix, configuration):
         else:
             wait_times.append(0)
 
-        current_spare_time = latest_time - service_start_time + wait_times[-1]
+        current_spare_time = subtract_time_and_time(latest_time, service_start_time) + wait_times[-1]
         spare_times.append(current_spare_time)
 
         if minimum_spare_time > 0:
@@ -178,10 +178,10 @@ def is_contained_in_time_slot(start, end, time):
 
 def push_back_departure_time(time_saving, arrival_times, wait_times, spare_times, best_earliest_departure_time,
                              minimum_spare_time):
-    updated_departure_time = best_earliest_departure_time + time_saving
+    updated_departure_time = add_time_and_time_delta(best_earliest_departure_time, time_saving)
 
     for i in range(0, len(arrival_times)):
-        arrival_times[i] += time_saving
+        arrival_times[i] = add_time_and_time_delta(arrival_times[i], time_saving)
         spare_times[i] -= time_saving
 
         minimum_spare_time = min(minimum_spare_time, spare_times[i])
@@ -198,7 +198,7 @@ def push_back_departure_time(time_saving, arrival_times, wait_times, spare_times
         if time_saving == 0:
             break
 
-    service_start_time = arrival_times[-1] + wait_times[-1]
+    service_start_time = add_time_and_time_delta(arrival_times[-1], wait_times[-1])
     return updated_departure_time, service_start_time, minimum_spare_time
 
 

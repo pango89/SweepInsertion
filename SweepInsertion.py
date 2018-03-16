@@ -20,7 +20,8 @@ def generate_routes(job, clustering_parameters, objective_coefficients):
             break
 
         if len(clustered_orders) > 0:
-            apply_best_feasible_insertion(route, clustered_orders, job.depot, job.locationMatrix, job.configuration,
+            apply_best_feasible_insertion(route, clustered_orders, job.depot, job.vehicles[0], job.locationMatrix,
+                                          job.configuration,
                                           objective_coefficients)
 
         if len(route.orders) > 0:
@@ -53,7 +54,7 @@ def initiate_new_route(orders, depot, vehicle, matrix, configuration):
     return route
 
 
-def apply_best_feasible_insertion(route, clustered_orders, depot, matrix, configuration, coefficients):
+def apply_best_feasible_insertion(route, clustered_orders, depot, vehicle, matrix, configuration, coefficients):
     while True:
         best_route_timing = None
         best_order_to_insert = None
@@ -71,6 +72,7 @@ def apply_best_feasible_insertion(route, clustered_orders, depot, matrix, config
             for i in range(0, len(route.orders) + 1):
                 updated_orders = route.orders[:i] + [order] + route.orders[i:]
                 status, new_time_space_info = FeasibilityUtility.perform_feasibility_check(updated_orders, depot,
+                                                                                           vehicle,
                                                                                            matrix,
                                                                                            configuration)
                 if status == FeasibilityStatus.feasible:
