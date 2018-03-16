@@ -1,5 +1,6 @@
-from marshmallow import Schema, fields, post_load
-#from marshmallow_enum import EnumField
+from marshmallow import Schema, fields, post_load, pre_dump
+from marshmallow_enum import EnumField
+import json
 
 from Classes import *
 
@@ -15,8 +16,8 @@ class LocationSchema(Schema):
 
 
 class TimeWindowSchema(Schema):
-    startTime = fields.Str()#Time('%H:%M %p')
-    endTime = fields.Str()#Time('%H:%M %p')
+    startTime = fields.Str()  # Time('%H:%M %p')
+    endTime = fields.Str()  # Time('%H:%M %p')
 
     @post_load
     def make_timeWindow(self, data):
@@ -26,7 +27,7 @@ class TimeWindowSchema(Schema):
 class TimeFeatureSchema(Schema):
     timeWindow = fields.Nested(TimeWindowSchema())
     handlingTime = fields.Integer()
-    readyForDepartureTime = fields.Str()#Time('%H:%M %p')
+    readyForDepartureTime = fields.Str()  # Time('%H:%M %p')
 
     @post_load
     def make_timeFeature(self, data):
@@ -54,9 +55,9 @@ class ConfigurationSchema(Schema):
 
 
 class DistanceInfoSchema(Schema):
-    distance = fields.Integer()
-    time = fields.Integer()
-    totalCost = fields.Integer()
+    distance = fields.Float()
+    time = fields.Float()
+    totalCost = fields.Float()
 
     @post_load
     def make_distanceInfo(self, data):
@@ -98,9 +99,9 @@ class OrderSchema(Schema):
 class TimeSpaceInfoSchema(Schema):
     travel_time = fields.Int()
     travel_distance = fields.Float()
-    arrival_times = fields.Dict(keys=fields.Nested(OrderSchema), values=fields.Time())
-    waiting_times = fields.Dict(keys=fields.Nested(OrderSchema), values=fields.Time())
-    spare_times = fields.Dict(keys=fields.Nested(OrderSchema), values=fields.Time())
+    arrival_times = fields.List(fields.Time('%I:%M %p'))
+    waiting_times = fields.List(fields.Float())
+    spare_times = fields.List(fields.Float())
     earliest_departure_time = fields.Time()
     best_earliest_departure_time = fields.Time()
     best_latest_departure_time = fields.Time()
@@ -119,7 +120,7 @@ class JobInputSchema(Schema):
 
 
 class RouteSchema(Schema):
-    #status = EnumField(FeasibilityStatus)
+    status = EnumField(FeasibilityStatus)
     orders = fields.List(fields.Nested(OrderSchema))
     depot = fields.Nested(DepotSchema)
     vehicle = fields.Nested(VehicleSchema)
