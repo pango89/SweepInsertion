@@ -23,9 +23,9 @@ def subtract_time_and_time(time1, time2):
 
 
 def is_time_window_honoured(orders, depot, matrix, configuration):
-    orders_arrival_time = {}
-    orders_wait_time = {}
-    orders_spare_time = {}
+    orders_arrival_time = []
+    orders_wait_time = []
+    orders_spare_time = []
 
     earliest_departure_time = max(order.timeFeature.readyForDepartureTime for order in orders)
 
@@ -147,9 +147,9 @@ def is_time_window_honoured(orders, depot, matrix, configuration):
     feasibility_status = FeasibilityStatus.feasible
 
     for index, order in enumerate(orders):
-        orders_arrival_time[order] = arrival_times[index]
-        orders_wait_time[order] = wait_times[index]
-        orders_spare_time[order] = spare_times[index]
+        orders_arrival_time.append(arrival_times[index])
+        orders_wait_time.append(wait_times[index])
+        orders_spare_time.append(spare_times[index])
 
     return feasibility_status, TimeSpaceInfo(travel_time_aggregate, travel_distance_aggregate, orders_arrival_time,
                                              orders_wait_time, orders_spare_time, earliest_departure_time,
