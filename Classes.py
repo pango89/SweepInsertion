@@ -109,6 +109,12 @@ class Route(object):
         self.time_space_info = time_space_info
 
 
+class Output(object):
+    def __init__(self, routes, un_routed_orders):
+        self.routes = routes
+        self.un_routed_orders = un_routed_orders
+
+
 class FeasibilityStatus(Enum):
     none = 0
     feasible = 1

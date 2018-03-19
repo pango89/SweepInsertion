@@ -144,6 +144,13 @@ def is_time_window_honoured(orders, depot, matrix, configuration):
                                                  best_earliest_departure_time,
                                                  best_late_departure_time)
 
+    if not is_total_travel_distance_honoured(travel_distance_aggregate, configuration.maxTotalTravelDistance):
+        feasibility_status = FeasibilityStatus.total_travel_distance_not_honoured
+        return feasibility_status, TimeSpaceInfo(travel_time_aggregate, travel_distance_aggregate, orders_arrival_time,
+                                                 orders_wait_time, orders_spare_time, earliest_departure_time,
+                                                 best_earliest_departure_time,
+                                                 best_late_departure_time)
+
     feasibility_status = FeasibilityStatus.feasible
 
     for index, order in enumerate(orders):

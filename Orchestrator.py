@@ -3,7 +3,7 @@ from ObjectiveFunctions import ObjectiveCoefficient
 from SectorClusteringParameter import SectorClusteringParameter
 import SweepInsertion
 from Constants import SectorClusteringConstants, SweepObjectiveConstants
-from Schemas import RouteSchema
+from Schemas import OutputSchema
 import json
 import time
 
@@ -24,13 +24,13 @@ if __name__ == '__main__':
                                                   SweepObjectiveConstants.CONST_LAMBDA)
 
     start_time = time.time()
-    routes = SweepInsertion.generate_routes(job, clustering_parameters, objective_coefficients)
+    output = SweepInsertion.generate_routes(job, clustering_parameters, objective_coefficients)
     print("--- %s seconds taken for running the engine.---" % (time.time() - start_time))
 
     start_time = time.time()
-    route_schema = RouteSchema()
-    data = route_schema.dump(routes, many=True)
-    output = json.dumps(data)
-    print(output)
+    output_schema = OutputSchema()
+    data = output_schema.dump(output)
+    output_data_serialized = json.dumps(data)
+    print(output_data_serialized)
     print("--- %s seconds taken for writing output data.---" % (time.time() - start_time))
     print("Finished")

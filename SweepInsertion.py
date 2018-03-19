@@ -2,7 +2,7 @@ import SectorClustering as SectorClustering
 import FeasibilityUtility
 import ObjectiveFunctions
 import sys
-from Classes import Route, FeasibilityStatus
+from Classes import Route, FeasibilityStatus, Output
 
 
 def generate_routes(job, clustering_parameters, objective_coefficients):
@@ -33,7 +33,7 @@ def generate_routes(job, clustering_parameters, objective_coefficients):
         if len(un_routed_orders) <= 0:
             break
 
-    return output_routes
+    return Output(output_routes, un_routed_orders)
 
 
 def initiate_new_route(orders, depot, vehicle, matrix, configuration):
