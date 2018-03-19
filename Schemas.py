@@ -1,7 +1,5 @@
 from marshmallow import Schema, fields, post_load, pre_dump
 from marshmallow_enum import EnumField
-import json
-
 from Classes import *
 
 
@@ -129,3 +127,12 @@ class RouteSchema(Schema):
     @post_load
     def make_route(self, data):
         return Route(**data)
+
+
+class OutputSchema(Schema):
+    routes = fields.List(fields.Nested(RouteSchema))
+    un_routed_orders = fields.List(fields.Nested(OrderSchema))
+
+    @post_load
+    def make_output(self, data):
+        return Output(**data)
