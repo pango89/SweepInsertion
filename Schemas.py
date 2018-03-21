@@ -1,12 +1,18 @@
-from marshmallow import Schema, fields, post_load, pre_dump
+from marshmallow import Schema, fields, post_load, pre_dump, validates, ValidationError
 from marshmallow_enum import EnumField
 from Classes import *
 
 
 class LocationSchema(Schema):
-    locationId = fields.Integer()
+    locationId = fields.Integer(required=True, error_messages={'required': 'Provide a location ID'})
     latitude = fields.Float()
-    longitude = fields.Float()
+
+    @validates('latitude')
+    def validate_latitude(self, value):
+        if value < 0:
+            raise ValidationError('Latitude cannot be negative')
+
+    longitude = fields.Float(validate=lambda x: -180 <= x <= 180)
 
     @post_load
     def make_location(self, data):
@@ -71,8 +77,18 @@ class DepotSchema(Schema):
         return Depot(**data)
 
 
+def validate_vehicle_name(name):
+    # pattern = re.compile("^([A-Z]+)$")
+    l = ['mercedes', 'bmw']
+    return name in l
+
+
+def validate_vehicle_name_blank(name):
+    return not (name == '')
+
+
 class VehicleSchema(Schema):
-    name = fields.Str()
+    name = fields.Str(validate=[validate_vehicle_name, validate_vehicle_name_blank])
     isResidential = fields.Bool()
     hasLiftGate = fields.Bool()
     count = fields.Integer()
