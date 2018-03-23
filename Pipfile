@@ -6,6 +6,9 @@ name = "pypi"
 [packages]
 marshmallow = "*"
 marshmallow-enum = "*"
+pandas = "*"
+matplotlib = "*"
+pyproj = "*"
 
 [dev-packages]
 

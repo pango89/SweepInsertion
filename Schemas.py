@@ -88,7 +88,8 @@ def validate_vehicle_name_blank(name):
 
 
 class VehicleSchema(Schema):
-    name = fields.Str(validate=[validate_vehicle_name, validate_vehicle_name_blank])
+    # name = fields.Str(validate=[validate_vehicle_name, validate_vehicle_name_blank])
+    name = fields.Str()
     isResidential = fields.Bool()
     hasLiftGate = fields.Bool()
     count = fields.Integer()
